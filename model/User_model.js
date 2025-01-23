@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        default: "https://geographyandyou.com/images/user-profile.png",
+        // default: "https://geographyandyou.com/images/user-profile.png",
         validate(value) {
             // Add your validation logic here if needed
         },
