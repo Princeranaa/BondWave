@@ -1,11 +1,14 @@
 # DevTinder APIs
 
-<h1>authRouter<h1/>
+## authRouter
+
 - POST /signup
 - POST /login
 - POST /logout
 
-profileRouter
+<hr>
+
+## profileRouter
 - GET /profile/view
 - PATCH /profile/edit
 
