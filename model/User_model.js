@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
-
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+require("dotenv").config()
+
 
 const userSchema = new mongoose.Schema({
     firstName: {
@@ -44,7 +45,7 @@ const userSchema = new mongoose.Schema({
     },
     photoUrl: {
         type: String,
-        // default: "https://geographyandyou.com/images/user-profile.png",
+        default: "https://geographyandyou.com/images/user-profile.png",
         validate(value) {
             // Add your validation logic here if needed
         },
@@ -63,14 +64,14 @@ const userSchema = new mongoose.Schema({
 userSchema.methods.getJWT = async function () {
     const user = this;
   
-    const token = await jwt.sign({ _id: user._id }, "DEV@Tinder$790", {
+    const token = await jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
   
     return token;
   };
 
-  userSchema.methods.validatePassword = async function (passwordInputByUser) {
+userSchema.methods.validatePassword = async function (passwordInputByUser) {
     const user = this;
     const passwordHash = user.password;
   
@@ -83,5 +84,4 @@ userSchema.methods.getJWT = async function () {
   };
 
 
-
-module.exports = mongoose.model("User ", userSchema);
+module.exports = mongoose.model("User", userSchema);
