@@ -1,6 +1,6 @@
 # DevTinder APIs
 
-authRouter
+<h1>authRouter<h1/>
 - POST /signup
 - POST /login
 - POST /logout
