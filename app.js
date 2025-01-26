@@ -11,7 +11,12 @@ const Db = require("./config/database")
 Db.connectToDatabase()
 
 const router = require("./router/UserRouter");
+const profilerouter = require("./router/ProfileRouter");
+
+
 app.use("/", router)
+app.use("/", profilerouter)
+
 
 app.listen(PORT , ()=>{
     console.log(`server listening on port ${PORT}`);
