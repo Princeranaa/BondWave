@@ -12,10 +12,13 @@ Db.connectToDatabase()
 
 const router = require("./router/UserRouter");
 const profilerouter = require("./router/ProfileRouter");
+const requestRouter = require("./router/RequestRouter");
 
 
 app.use("/", router)
 app.use("/", profilerouter)
+app.use("/", requestRouter)
+
 
 
 app.listen(PORT , ()=>{
