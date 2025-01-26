@@ -2,45 +2,6 @@ const User = require("../model/User_model");
 const { validateSignUpData } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 
-// exports.SignupTheUser = async (req, res) => {
-//   try {
-//     // Validation of data
-//     validateSignUpData(req);
-
-//     const { firstName, lastName, emailId, password, skills, gender, age, photoUrl, about } = req.body;
-
-//     // Encrypt the password
-//     const passwordHash = await bcrypt.hash(password, 10);
-//     //   console.log(passwordHash);
-
-//     //   Creating a new instance of the User model
-//     const user = new User({
-//       firstName,
-//       lastName,
-//       emailId,
-//       skills,
-//       gender, 
-//       age,
-//       photoUrl,
-//       about,
-//       password: passwordHash,
-//     });
-
-
-//     const savedUser = await user.save();
-//     console.log(savedUser)
-//     const token = await savedUser.getJWT();
-//     console.log(token)
-
-//     res.cookie("token", token, {
-//       expires: new Date(Date.now() + 8 * 3600000),
-//     });
-
-//     res.json({ message: "User Added successfully!", data: savedUser });
-//   } catch (err) {
-//     res.status(400).send("ERROR : " + err.message);
-//   }
-// };
 
 
 exports.SignupTheUser = async (req, res) => {
