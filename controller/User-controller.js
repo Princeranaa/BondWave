@@ -93,7 +93,7 @@ exports.loginTheUser = async (req, res) => {
       httpOnly: true, // Secure cookie
     });
 
-    res.status(200).json({ message: "Login successful", user });
+    res.status(200).json({ message: "Login successful", });
   } catch (err) {
     console.error("Login Error:", err.message);
     res.status(500).send("ERROR: " + err.message);
