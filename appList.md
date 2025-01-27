@@ -9,3 +9,6 @@
 - GET /profile/view
 - PATCH /profile/edit
 
+## connectionRequestRouter
+- POST /request/send/:status/:userId
+- POST /request/review/:status/:requestId
