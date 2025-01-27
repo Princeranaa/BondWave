@@ -18,23 +18,29 @@ exports.UserConnectionRequest = async (req, res) => {
 };
 
 exports.requestAllTheUser = async (req,res) => {
-    try {
-        const loggedInUser = req.user;
-        const connectionRequest = await ConnectionRequest.find({
-             $or: [
-                { toUserId: loggedInUser._id, status: "accepted" },
-                { fromUserId: loggedInUser._id, status: "accepted" }
-              ]
-        }).populate("fromUserId", USER_INFO)
-        const data = connectionRequest.map(row=>row.fromUserId)
+  try {
+    const loggedInUser = req.user;
 
+    const connectionRequests = await ConnectionRequest.find({
+      $or: [
+        { toUserId: loggedInUser._id, status: "accepted" },
+        { fromUserId: loggedInUser._id, status: "accepted" },
+      ],
+    })
+      .populate("fromUserId", USER_INFO)
+      .populate("toUserId", USER_INFO);
 
-        res.status(200).json({
-            message: "Connetion fetch successfully",
-            data
-        });
+    console.log(connectionRequests);
 
-    } catch (error) {
-        res.status(404).json({ message: error.message });
-    }
+    const data = connectionRequests.map((row) => {
+      if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
+        return row.toUserId;
+      }
+      return row.fromUserId;
+    });
+
+    res.json({ data });
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
 }
