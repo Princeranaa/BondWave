@@ -1,9 +1,9 @@
 const ConnectionRequest = require("../model/Connection_model");
-const User = require("../model/User_model");
+const User = require("../model/Auth_user");
 
 exports.conncetionRequest = async (req, res) => {
   try {
-    const fromUserId = req.user._id;  // Assuming req.user is already populated
+    const fromUserId = req.user._id; // Assuming req.user is already populated
     const toUserId = req.params.toUserId;
     const status = req.params.status;
 
@@ -65,5 +65,40 @@ exports.conncetionRequest = async (req, res) => {
     });
   } catch (error) {
     return res.status(400).json({ message: error.message });
+  }
+};
+
+exports.accepteTheRequest = async (req, res) => {
+  try {
+    const loggedInUser = req.user;
+
+    const { status, requestId } = req.params;
+
+    // validate the status ==> "accepted" or the "rejected"
+    const allowedStatus = ["accepted", "rejected"];
+    if (!allowedStatus.includes(status)) {
+      return res.status(400).json({ message: "Invalid status type" });
+    }
+
+    // find the Use is LoggedIn User or not and also its present in the Data base or not
+    const connectionRequest = await ConnectionRequest.findOne({
+      _id: requestId,
+      toUserId: loggedInUser._id,
+      status: "interested",
+    });
+    if (!connectionRequest) {
+      return res
+        .status(404)
+        .json({ message: "No such connection request found" });
+    }
+
+    // update the status of connection request
+    connectionRequest.status = status;
+
+    const data = await connectionRequest.save();
+    res.status(200).json({ message: "Connection request " + status, data });
+  } catch (error) {
+    console.log(error);
+    res.status(400).json({ message: error.message });
   }
 };

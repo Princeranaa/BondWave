@@ -10,12 +10,12 @@ const PORT = process.env.PORT || 4000;
 const Db = require("./config/database")
 Db.connectToDatabase()
 
-const router = require("./router/UserRouter");
+const AuthUser = require("./router/AuthUser");
 const profilerouter = require("./router/ProfileRouter");
 const requestRouter = require("./router/RequestRouter");
 
 
-app.use("/", router)
+app.use("/", AuthUser)
 app.use("/", profilerouter)
 app.use("/", requestRouter)
 
