@@ -44,3 +44,20 @@ exports.requestAllTheUser = async (req,res) => {
     res.status(400).send({ message: err.message });
   }
 }
+
+exports.userFeed = async (req,res) => {
+  try {
+    
+    const loggedInUser = req.user;
+
+    const connectionRequests = await ConnectionRequest.find({
+      $or:[ {fromUserId: loggedInUser._id}, {toUserId: loggedInUser._id} ]
+    }).select("fromUserId  toUserId").populate("fromUserId", "firstName").populate("toUserId", "firstName")
+
+    res.send(connectionRequests);
+
+
+  } catch (error) {
+    res.status(404).send({ message: err.message });
+  }
+}
