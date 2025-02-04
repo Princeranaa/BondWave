@@ -82,7 +82,7 @@ exports.userFeed = async (req, res) => {
       ],
     }).select(USER_INFO).skip(skip).limit(limit);
 
-   res.send(users)
+    res.json({ data: users });
   
   } catch (error) {
     res.status(404).send({ message: error.message });
