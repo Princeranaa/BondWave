@@ -1,4 +1,3 @@
-const express = require("express");
 const ConnectionRequest = require("../model/Connection_model");
 const User = require("../model/Auth_user");
 
@@ -35,7 +34,6 @@ exports.requestAllTheUser = async (req, res) => {
       .populate("fromUserId", USER_INFO)
       .populate("toUserId", USER_INFO);
 
-    console.log(connectionRequests);
 
     const data = connectionRequests.map((row) => {
       if (row.fromUserId._id.toString() === loggedInUser._id.toString()) {
@@ -73,7 +71,6 @@ exports.userFeed = async (req, res) => {
       hideUserFromFeed.add(request.fromUserId._id.toString());
       hideUserFromFeed.add(request.toUserId._id.toString());
     });
-    console.log(hideUserFromFeed);
 
     const users = await User.find({
       $and: [
