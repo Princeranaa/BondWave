@@ -2,15 +2,8 @@ const express = require("express");
 const ConnectionRequest = require("../model/Connection_model");
 const User = require("../model/Auth_user");
 
-const USER_INFO = [
-  "firstName",
-  "lastName",
-  "age",
-  "gender",
-  "photoUrl",
-  "about",
-  "skills",
-];
+// const USER_INFO = ["firstName","lastName","age","gender","photoUrl","about","skills",];
+const USER_INFO = "firstName lastName photoUrl age gender about skills";
 exports.UserConnectionRequest = async (req, res) => {
   try {
     const loggedInUser = req.user;
@@ -60,6 +53,11 @@ exports.requestAllTheUser = async (req, res) => {
 exports.userFeed = async (req, res) => {
   try {
     const loggedInUser = req.user;
+    
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    limit = limit > 50 ? 50 : limit;
+    const skip = (page - 1)*limit;
 
     const connectionRequests = await ConnectionRequest.find({
       $or: [{ fromUserId: loggedInUser._id }, { toUserId: loggedInUser._id }],
@@ -82,7 +80,7 @@ exports.userFeed = async (req, res) => {
         { _id: { $nin: Array.from(hideUserFromFeed) } },
         { _id: { $ne: loggedInUser._id } },
       ],
-    }).select(USER_INFO)
+    }).select(USER_INFO).skip(skip).limit(limit);
 
    res.send(users)
   
