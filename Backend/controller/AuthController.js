@@ -92,8 +92,8 @@ exports.loginTheUser = async (req, res) => {
       expires: new Date(Date.now() + 8 * 3600000),
       httpOnly: true, // Secure cookie
     });
-
-    res.status(200).json({ message: "Login successful", });
+   res.send(user)
+    res.status(200).json({ message: "Login successful", user });
   } catch (err) {
     console.error("Login Error:", err.message);
     res.status(500).send("ERROR: " + err.message);
