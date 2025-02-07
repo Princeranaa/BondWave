@@ -10,7 +10,7 @@ function Login() {
       const response = await axios.post("http://localhost:3000/login", {
         emailId, // Changed 'email' to 'emailId' to match backend
         password
-      });
+      },{withCredentials: true});
       console.log(response.data);
     } catch (error) {
       console.log(error.response?.data || error.message, "Something went wrong");
