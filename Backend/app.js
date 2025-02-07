@@ -1,10 +1,13 @@
 const express = require('express');
 const app = express();
-app.use(express.json());
+const cors = require('cors');
 require("dotenv").config()
 const cookie = require('cookie-parser');
 app.use(cookie())
-
+app.use(express.json());
+app.use(cors({
+    origin: 'http://localhost:5173'
+}));
 const PORT = process.env.PORT || 4000;
 
 const Db = require("./config/database")
