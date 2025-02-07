@@ -59,93 +59,32 @@ exports.SignupTheUser = async (req, res) => {
 };
 
 
-// exports.loginTheUser = async (req, res) => {
-//   try {
-//     const { emailId, password } = req.body;
-
-//     if (!emailId || !password) {
-//       return res.status(400).send("ERROR: Email and password are required.");
-//     }
-
-//     console.log("Login attempt:", { emailId, password });
-
-//     // Find the user by email
-//     const user = await User.findOne({ emailId });
-//     if (!user) {
-//       console.log("User not found for email:", emailId);
-//       return res.status(401).send("ERROR: Invalid email or password.");
-//     }
-
-//     // Validate the password
-//     const isPasswordValid = await bcrypt.compare(password, user.password);
-//     if (!isPasswordValid) {
-//       console.log("Invalid password for email:", emailId);
-//       return res.status(401).send("ERROR: Invalid email or password.");
-//     }
-
-//     // Generate a token
-//     const token = await user.getJWT();
-//     console.log("JWT generated:", token);
-
-//     // Set the token in cookies
-//     res.cookie("token", token, {
-//       expires: new Date(Date.now() + 8 * 3600000),
-//       httpOnly: true, // Secure cookie
-//     });
-//    res.send(user)
-//     return res.status(200).json({ message: "Login successful",});
-//   } catch (err) {
-//     console.error("Login Error:", err.message);
-//     res.status(500).send("ERROR: " + err.message);
-//   }
-// };
-
-
 exports.loginTheUser = async (req, res) => {
   try {
     const { emailId, password } = req.body;
 
-    if (!emailId || !password) {
-      return res.status(400).json({ error: "Email and password are required." });
-    }
-
-    console.log("Login attempt:", { emailId, password });
-
-    // Find the user by email
-    const user = await User.findOne({ emailId });
+    const user = await User.findOne({ emailId: emailId });
     if (!user) {
-      console.log("User not found for email:", emailId);
-      return res.status(401).json({ error: "Invalid email or password." });
+      throw new Error("Invalid credentials");
     }
+    const isPasswordValid = await user.validatePassword(password);
 
-    // Validate the password
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      console.log("Invalid password for email:", emailId);
-      return res.status(401).json({ error: "Invalid email or password." });
+    if (isPasswordValid) {
+      const token = await user.getJWT();
+
+      res.cookie("token", token, {
+        expires: new Date(Date.now() + 8 * 3600000),
+      });
+      res.send(user);
+    } else {
+      throw new Error("Invalid credentials");
     }
-
-    // Generate a token
-    const token = await user.getJWT();
-    console.log("JWT generated:", token);
-
-    // Set the token in cookies
-    res.cookie("token", token, {
-      expires: new Date(Date.now() + 8 * 3600000),
-      httpOnly: true, // Secure cookie
-    });
-
-    // Send only one response
-    return res.status(200).json({ message: "Login successful", user });
   } catch (err) {
-    console.error("Login Error:", err.message);
-    
-    // Ensure only one response is sent
-    if (!res.headersSent) {
-      return res.status(500).json({ error: err.message });
-    }
+    res.status(400).send("ERROR : " + err.message);
   }
 };
+
+
 
 
 
