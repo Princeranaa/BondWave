@@ -1,19 +1,33 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/userSlice";
+import { useNavigate } from "react-router-dom";
+import {BASE_URL} from '../utils/Constant'
 
 function Login() {
   const [emailId, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:3000/login", {
-        emailId, // Changed 'email' to 'emailId' to match backend
-        password
-      },{withCredentials: true});
-      console.log(response.data);
+      const response = await axios.post(
+        BASE_URL + "/login",
+        {
+          emailId, // Changed 'email' to 'emailId' to match backend
+          password,
+        },
+        { withCredentials: true }
+      );
+      dispatch(addUser(response.data));
+      return navigate("/");
     } catch (error) {
-      console.log(error.response?.data || error.message, "Something went wrong");
+      console.log(
+        error.response?.data || error.message,
+        "Something went wrong"
+      );
     }
   };
 

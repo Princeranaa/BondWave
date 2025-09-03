@@ -1,7 +1,8 @@
 import { Routes, Route } from "react-router-dom"
-import Body from "./Body"
-import Login from "./Login"
-import Profile from "./Profile"
+import Body from "./Components/Body"
+import Login from "./Components/Login"
+import Profile from "./Components/Profile"
+import Feed from './Components/Feed'
 
 function App() {
 
@@ -9,6 +10,7 @@ function App() {
    <>
    <Routes>
     <Route path="/" element={<Body/>}>
+    <Route path="/" element={<Feed/>}/>
     <Route path="/login" element={<Login/>}/>
     <Route path="/profile" element={<Profile/>}/>
     </Route>
