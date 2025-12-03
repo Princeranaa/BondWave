@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
-import { useNavigate } from "react-router-dom";
-import {BASE_URL} from '../utils/Constant'
+import { Link, useNavigate } from "react-router-dom";
+import { BASE_URL } from "../utils/Constant";
 
 function Login() {
   const [emailId, setEmail] = useState("");
@@ -62,6 +62,16 @@ function Login() {
               />
             </label>
           </div>
+
+          <div className="flex justify-center">
+            <h2>
+              Not Registered Yet ?{" "}
+              <Link to={"/signup"}>
+              <span className="text-blue-500">Sign Up</span>{" "}
+              </Link>
+            </h2>
+          </div>
+
           <div className="card-actions justify-center">
             <button onClick={handleSubmit} className="btn btn-primary">
               Login
