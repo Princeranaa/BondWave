@@ -1,8 +1,10 @@
 const razorpayInstance = require("../config/razorpay");
 const Payment = require("../model/payment_model");
-const User = require("../model/Auth_user")
+const User = require("../model/Auth_user");
 const { membershipAmount } = require("../utils/memberShipConstans");
-const {validateWebhookSignature} = require("razorpay/dist/utils/razorpay-utils");
+const {
+  validateWebhookSignature,
+} = require("razorpay/dist/utils/razorpay-utils");
 
 /* 
 exports.createPayment = async (req, res) => {
@@ -52,7 +54,6 @@ exports.createPayment = async (req, res) => {
 
  */
 
-
 exports.createPayment = async (req, res) => {
   try {
     // fetch the data
@@ -76,7 +77,7 @@ exports.createPayment = async (req, res) => {
         lastName,
         emailId,
         membershipType,
-      }
+      },
     };
 
     // log it
@@ -98,9 +99,8 @@ exports.createPayment = async (req, res) => {
     // return mock order to frontend
     res.json({
       ...savedPayment.toJSON(),
-      keyId: process.env.RAZORPAY_KEY_ID || "mock_key_123"
+      keyId: process.env.RAZORPAY_KEY_ID || "mock_key_123",
     });
-
   } catch (error) {
     console.log("something went wrong->", error);
     res.status(500).json({
@@ -109,8 +109,8 @@ exports.createPayment = async (req, res) => {
   }
 };
 
-exports.verifyPayment = async(req,res) => {
-    try {
+exports.verifyPayment = async (req, res) => {
+  try {
     console.log("Webhook Called");
     const webhookSignature = req.get("X-Razorpay-Signature");
     console.log("Webhook Signature", webhookSignature);
@@ -155,4 +155,13 @@ exports.verifyPayment = async(req,res) => {
   } catch (err) {
     return res.status(500).json({ msg: err.message });
   }
-}
+};
+
+exports.premiumVerifyUser = async (req, res) => {
+  const user = req.user.toJSON();
+  console.log(user);
+  if (user.isPremium) {
+    return res.json({ ...user });
+  }
+  return res.json({ ...user });
+};
