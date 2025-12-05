@@ -1,6 +1,48 @@
 import React from "react";
+import axios from 'axios'
+import {BASE_URL} from '../utils/Constant'
 
 function Premium() {
+
+  const handleBuyClick = async(type)=>{
+     const order = await axios.post(BASE_URL + "/payment/create", 
+      {  membershipType: type}, // membership types we send 
+      { withCredentials: true }
+    );
+
+    console.log("orderAPICall------->", order)
+
+    const { amount, keyId, currency, notes, orderId } = order.data;
+
+    const options = {
+      key: keyId,
+      amount,
+      currency,
+      name: "Bond Wave",
+      description: "Connect to other developers",
+      order_id: orderId,
+      prefill: {
+        name: notes.firstName + " " + notes.lastName,
+        email: notes.emailId,
+        contact: "9999999999",
+      },
+      theme: {
+        color: "#F37254",
+      },
+      
+    };
+
+    /* it should open the razorpay-payment dialog boxx */
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+
+
+  }
+
+
+
+
+
   return (
     <div className="m-10">
       <div className="flex w-full">
@@ -14,7 +56,7 @@ function Premium() {
           </ul>
 
           <button
-            
+            onClick={() => handleBuyClick("gold")}
             className="btn btn-secondary"
           >
             Buy Silver
@@ -32,7 +74,7 @@ function Premium() {
           </ul>
           
           <button
-            
+             onClick={() => handleBuyClick("gold")}
             className="btn btn-primary"
           >
             Buy Gold
