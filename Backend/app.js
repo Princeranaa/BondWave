@@ -18,12 +18,14 @@ const AuthUser = require("./router/AuthUser");
 const profilerouter = require("./router/ProfileRouter");
 const requestRouter = require("./router/RequestRouter");
 const userRouter = require('./router/UserRouter');
+const paymentRouter = require('./router/payment')
 
 
 app.use("/", AuthUser)
 app.use("/", profilerouter)
 app.use("/", requestRouter)
 app.use("/", userRouter)
+app.use("/", paymentRouter)
 
 
 app.listen(PORT , ()=>{
