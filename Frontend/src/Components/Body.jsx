@@ -42,12 +42,15 @@ function Body() {
   }, [location.pathname]);
 
   return (
-    <div>
-      <Nabvar />
+  <div className="flex flex-col min-h-screen">
+    <Nabvar />
+    <div className="flex-1">
       <Outlet />
-      <Footer />
     </div>
-  );
+    <Footer />
+  </div>
+);
+
 }
 
 export default Body;
