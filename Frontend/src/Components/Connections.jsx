@@ -59,7 +59,8 @@ function Connections() {
             {/* Chat button moved to right end */}
             <div>
               {/* to={"/chat/" + _id} for chatting */}
-              <Link>
+              
+              <Link to={"/chat/" + _id}>
                 <button className="btn btn-primary">Chat</button>
               </Link>
             </div>

@@ -28,7 +28,7 @@ function Nabvar() {
   return (
     <div className="navbar bg-base-300">
       <div className="flex-1">
-        <a className="btn btn-ghost text-xl">👦🏻 devTinder</a>
+        <a className="btn btn-ghost text-xl">👦🏻 BondWave</a>
       </div>
       {user && (
         <div className="flex-none gap-2">

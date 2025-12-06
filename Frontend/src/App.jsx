@@ -7,6 +7,7 @@ import Connections from "./Components/Connections";
 import Requests from "./Components/Requests";
 import Signup from "./Components/Signup";
 import Premium from "./Components/Premium";
+import Chat from "./Components/Chat";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/connections" element={<Connections />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/premium" element={<Premium />} />
+          <Route path="/chat/:targetUserId" element={<Chat />} />
         </Route>
       </Routes>
     </>
