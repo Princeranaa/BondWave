@@ -1,9 +1,8 @@
 const crypto = require("crypto");
 const socket = require("socket.io");
-
+const Chat = require("../../Backend/model/Chat");
 
 const initializeScoket = (server) => {
-
   const getSecretRoomId = (userId, targetUserId) => {
     return crypto
       .createHash("sha256")
@@ -32,12 +31,35 @@ const initializeScoket = (server) => {
 
     socket.on(
       "sendMessage",
-      ({ firstName, userId, targetUserId, newMessage }) => {
-        console.log(firstName + " " + newMessage);
-
+      async ({ firstName,lastName, userId, targetUserId, text }) => {
+        // console.log(firstName + " " + text);
         // const roomId = [userId, targetUserId].sort().join("_");
-        const roomId = getSecretRoomId(userId, targetUserId);
-        io.to(roomId).emit("messageReceived", { firstName, newMessage });
+        console.log("PAYLOAD RECEIVED:", { firstName,lastName , userId, targetUserId, text });
+
+        try {
+          const roomId = getSecretRoomId(userId, targetUserId);
+          console.log(firstName + " " + text);
+          let chat = await Chat.findOne({
+            participants: { $all: [userId, targetUserId] },
+          });
+
+          if (!chat) {
+            chat = new Chat({
+              participants: [userId, targetUserId],
+              messages: [],
+            });
+          }
+
+          chat.messages.push({
+            senderId: userId,
+            text,
+          });
+
+          await chat.save();
+          io.to(roomId).emit("messageReceived", { firstName, lastName, text });
+        } catch (error) {
+          console.log("sendMessage", error);
+        }
       }
     );
 

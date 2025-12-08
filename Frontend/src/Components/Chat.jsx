@@ -20,9 +20,10 @@ function Chat() {
     const socket = createSocketConnection();
     socket.emit("sendMessage", {
       firstName: user.firstName,
+       lastName: user.lastName,
       userId,
       targetUserId,
-      newMessage,
+      text:newMessage,
     });
 
     setNewMessage(""); //clear the msg on the input field
@@ -40,9 +41,9 @@ function Chat() {
       targetUserId,
     });
 
-    socket.on("messageReceived", ({ firstName, newMessage }) => {
-      console.log(firstName + " " + newMessage);
-      setMessage((message) => [...message, { firstName, newMessage }]);
+    socket.on("messageReceived", ({ firstName, text  }) => {
+      console.log(firstName + " " + text );
+      setMessage((message) => [...message, { firstName, text  }]);
     });
 
     return () => {
@@ -83,14 +84,14 @@ function Chat() {
               /* Right message (YOU) */
               <div key={index} className="flex items-end justify-end gap-2">
                 <div className="p-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl max-w-[70%]">
-                  <p>{msg.newMessage}</p>
+                  <p>{msg.text }</p>
                 </div>
               </div>
             ) : (
               /* Left message (OTHER USER) */
               <div key={index} className="flex items-start gap-2">
                 <div className="p-3 bg-base-200 rounded-xl max-w-[70%]">
-                  <p>{msg.newMessage}</p>
+                  <p>{msg.text }</p>
                 </div>
               </div>
             )

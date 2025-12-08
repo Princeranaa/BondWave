@@ -18,13 +18,15 @@ const profilerouter = require("./router/ProfileRouter");
 const requestRouter = require("./router/RequestRouter");
 const userRouter = require('./router/UserRouter');
 const paymentRouter = require('./router/payment')
-
+const chatRouter = require('./router/ChatRouter');
 
 app.use("/", AuthUser)
 app.use("/", profilerouter)
 app.use("/", requestRouter)
 app.use("/", userRouter)
 app.use("/", paymentRouter)
+app.use("/", chatRouter)
+
 
 
 module.exports = app
