@@ -5,6 +5,6 @@ const chatRouter = express.Router()
 
 
 
-chatRouter.post("/chat/:targetUserId", userAuth, getChatcontroller)
+chatRouter.get("/chat/:targetUserId", userAuth, getChatcontroller)
 
 module.exports = chatRouter

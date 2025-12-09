@@ -4,6 +4,8 @@ import { ArrowLeft } from "lucide-react"; // optional icon (install if needed)
 import { useSelector } from "react-redux";
 import { createSocketConnection } from "../utils/socket";
 import { useState } from "react";
+import axios from 'axios'
+import {BASE_URL} from '../utils/Constant'
 
 function Chat() {
   const { targetUserId } = useParams();
@@ -15,15 +17,36 @@ function Chat() {
   console.log("chatUser", user);
   const userId = user?._id;
 
+  const fetchChatMessages = async () => {
+    const chat = await axios.get(BASE_URL + "/chat/" + targetUserId, {
+      withCredentials: true,
+    });
+
+    console.log("chatmessagesssss-->", chat.data.messages);
+
+    const chatMessages = chat?.data?.messages.map((msg) => {
+      const { senderId, text } = msg;
+      return {
+        firstName: senderId?.firstName,
+        lastName: senderId?.lastName,
+        text,
+      };
+    });
+    setMessage(chatMessages);
+  };
+  useEffect(() => {
+    fetchChatMessages();
+  }, []);
+
   /* send message function  */
   const sendMessage = () => {
     const socket = createSocketConnection();
     socket.emit("sendMessage", {
       firstName: user.firstName,
-       lastName: user.lastName,
+      lastName: user.lastName,
       userId,
       targetUserId,
-      text:newMessage,
+      text: newMessage,
     });
 
     setNewMessage(""); //clear the msg on the input field
@@ -41,9 +64,9 @@ function Chat() {
       targetUserId,
     });
 
-    socket.on("messageReceived", ({ firstName, text  }) => {
-      console.log(firstName + " " + text );
-      setMessage((message) => [...message, { firstName, text  }]);
+    socket.on("messageReceived", ({ firstName, text }) => {
+      console.log("hello user---->",firstName + " " + text);
+      setMessage((message) => [...message, { firstName, text }]);
     });
 
     return () => {
@@ -71,7 +94,9 @@ function Chat() {
 
           {user && (
             <div>
-              <h2 className="text-xl font-bold">{user.firstName + " " + user.lastName}</h2>
+              <h2 className="text-xl font-bold">
+                {user.firstName + " " + user.lastName}
+              </h2>
               <p className="text-sm opacity-80">Online</p>
             </div>
           )}
@@ -84,14 +109,14 @@ function Chat() {
               /* Right message (YOU) */
               <div key={index} className="flex items-end justify-end gap-2">
                 <div className="p-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl max-w-[70%]">
-                  <p>{msg.text }</p>
+                  <p>{msg.text}</p>
                 </div>
               </div>
             ) : (
               /* Left message (OTHER USER) */
               <div key={index} className="flex items-start gap-2">
                 <div className="p-3 bg-base-200 rounded-xl max-w-[70%]">
-                  <p>{msg.text }</p>
+                  <p>{msg.text}</p>
                 </div>
               </div>
             )
