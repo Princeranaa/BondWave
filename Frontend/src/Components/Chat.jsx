@@ -1,16 +1,18 @@
 import React, { useRef, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useLocation } from "react-router-dom";
 import { ArrowLeft } from "lucide-react"; // optional icon (install if needed)
 import { useSelector } from "react-redux";
 import { createSocketConnection } from "../utils/socket";
 import { useState } from "react";
-import axios from 'axios'
-import {BASE_URL} from '../utils/Constant'
+import axios from "axios";
+import { BASE_URL } from "../utils/Constant";
 
 function Chat() {
   const { targetUserId } = useParams();
   const [message, setMessage] = useState([]);
   const [newMessage, setNewMessage] = useState();
+  const location = useLocation();
+  const targetUser = location.state?.targetUser;
 
   /* get the user id */
   const user = useSelector((store) => store.user);
@@ -65,7 +67,7 @@ function Chat() {
     });
 
     socket.on("messageReceived", ({ firstName, text }) => {
-      console.log("hello user---->",firstName + " " + text);
+      console.log("hello user---->", firstName + " " + text);
       setMessage((message) => [...message, { firstName, text }]);
     });
 
@@ -88,14 +90,19 @@ function Chat() {
 
           <div className="avatar">
             <div className="w-12 rounded-full ring-2 ring-white/40">
-              <img src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe" />
+              <img
+                src={
+                  targetUser?.photoUrl ||
+                  "https://images.unsplash.com/photo-1502685104226-ee32379fefbe"
+                }
+              />
             </div>
           </div>
 
-          {user && (
+          {targetUser && (
             <div>
               <h2 className="text-xl font-bold">
-                {user.firstName + " " + user.lastName}
+                {targetUser.firstName + " " + targetUser.lastName}
               </h2>
               <p className="text-sm opacity-80">Online</p>
             </div>

@@ -33,7 +33,8 @@ function Connections() {
       <h1 className="text-bold text-white text-3xl">Connections</h1>
 
       {connections.map((connection) => {
-        const { _id, firstName, lastName, photoUrl, age, gender, about } = connection;
+        const { _id, firstName, lastName, photoUrl, age, gender, about } =
+          connection;
 
         return (
           <div
@@ -59,8 +60,18 @@ function Connections() {
             {/* Chat button moved to right end */}
             <div>
               {/* to={"/chat/" + _id} for chatting */}
-              
-              <Link to={"/chat/" + _id}>
+
+              <Link
+                to={`/chat/${_id}`}
+                state={{
+                  targetUser: {
+                    _id,
+                    firstName,
+                    lastName,
+                    photoUrl,
+                  },
+                }}
+              >
                 <button className="btn btn-primary">Chat</button>
               </Link>
             </div>
