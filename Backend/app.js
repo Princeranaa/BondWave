@@ -5,7 +5,7 @@ const cookie = require('cookie-parser');
 app.use(cookie())
 app.use(express.json());
 app.use(cors({
-    origin: 'http://localhost:5173',
+    origin: 'https://bond-wave-xlkg.vercel.app',
     credentials: true
 }));
 
