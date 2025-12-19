@@ -8,15 +8,17 @@ import Requests from "./Components/Requests";
 import Signup from "./Components/Signup";
 import Premium from "./Components/Premium";
 import Chat from "./Components/Chat";
+import LandingPage from "./Components/LandingPage";
 
 function App() {
   return (
     <>
       <Routes>
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/login" element={<Login />} />
+         <Route path="/" element={<LandingPage />} />
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/" element={<Body />}>
-          <Route path="/" element={<Feed />} />
+          <Route path="/feed" element={<Feed />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/connections" element={<Connections />} />
           <Route path="/requests" element={<Requests />} />
