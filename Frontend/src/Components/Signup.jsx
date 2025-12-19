@@ -47,7 +47,7 @@ function Signup() {
         { withCredentials: true }
       );
       dispatch(addUser(response.data.data));
-      navigate("/");
+      navigate("/feed");
     } catch (err) {
       setError(err.response?.data || "Signup failed");
     } finally {
@@ -129,6 +129,22 @@ function Signup() {
                   <option value="female">Female</option>
                 </select>
               </div>
+
+              <div className="form-control md:col-span-2">
+                      <label className="label py-1">
+                        <span className="label-text text-xs font-bold uppercase">
+                          Profile Photo URL
+                        </span>
+                      </label>
+                      <input
+                        type="text"
+                        value={photoUrl}
+                        onChange={(e) => setPhotoUrl(e.target.value)}
+                        placeholder="https://example.com/photo.jpg"
+                        className="input input-sm bg-base-200 border-none focus:ring-1 focus:ring-rose-400 h-10"
+                      />
+              </div>
+
 
               <div className="form-control md:col-span-2">
                 <label className="label py-1"><span className="label-text text-xs font-bold uppercase">Interests</span></label>

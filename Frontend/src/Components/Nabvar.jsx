@@ -66,7 +66,7 @@ return (
             </span>
             
             <div className="dropdown dropdown-end">
-              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar online ring-2 ring-rose-500 ring-offset-2 ring-offset-base-100">
+              <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar online ring-2 ring-violet-500 ring-offset-2 ring-offset-base-100">
                 <div className="w-10 rounded-full">
                   <img alt="User" src={user.photoUrl || "https://via.placeholder.com/150"} />
                 </div>

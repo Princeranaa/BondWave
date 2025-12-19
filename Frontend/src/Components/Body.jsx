@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Nabvar from "./Nabvar";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import axios from "axios";
 import { addUser } from "../utils/userSlice";
@@ -9,6 +9,7 @@ import { useDispatch } from "react-redux";
 function Body() {
   const dispatchEvent = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const fetchUser = async () => {
     try {
@@ -17,6 +18,7 @@ function Body() {
       });
       dispatchEvent(addUser(res.data));
     } catch (error) {
+      const status = error?.response?.status;
       if (error?.response?.status === 401) {
         navigate("/login");
       }
