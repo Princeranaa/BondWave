@@ -4,10 +4,19 @@ const cors = require('cors');
 const cookie = require('cookie-parser');
 app.use(cookie())
 app.use(express.json());
-app.use(cors({
-    origin: 'https://bond-wave-xlkg.vercel.app',
+
+
+const allowedOrigins = [
+  "http://localhost:5173",          // for local frontend
+  "bond-wave.vercel.app" // for production frontend
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
     credentials: true
-}));
+  })
+);
 
 
 const Db = require("./config/database")
