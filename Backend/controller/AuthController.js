@@ -60,9 +60,7 @@ exports.SignupTheUser = async (req, res) => {
     // Set the token in cookies
     res.cookie("token", token, {
       expires: new Date(Date.now() + 8 * 3600000),
-      httpOnly: true,
-      secure: true,
-      sameSite: "None",
+      httpOnly: true, // Secure cookie
     });
 
     res
@@ -169,9 +167,7 @@ exports.changePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
 
     if (!oldPassword || !newPassword) {
-      return res
-        .status(400)
-        .json({ message: "Old and new password are required." });
+      return res.status(400).json({ message: "Old and new password are required." });
     }
 
     const user = await User.findById(userId);
@@ -213,9 +209,6 @@ exports.loginTheUser = async (req, res) => {
 
       res.cookie("token", token, {
         expires: new Date(Date.now() + 8 * 3600000),
-        httpOnly: true,
-        secure: true,
-        sameSite: "None",
       });
       res.send(user);
     } else {
@@ -229,9 +222,6 @@ exports.loginTheUser = async (req, res) => {
 exports.logout = async (req, res) => {
   res.cookie("token", null, {
     expires: new Date(Date.now()),
-    httpOnly: true,
-    secure: true,
-    sameSite: "None",
   });
 
   res.send("Logout Successful!!");
