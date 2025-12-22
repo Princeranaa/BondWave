@@ -2,6 +2,9 @@ const User = require("../model/Auth_user");
 const { validateSignUpData } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const {sendEmail} = require("../config/Nodemailer");
+
+
 exports.SignupTheUser = async (req, res) => {
   try {
     // Destructure and validate input
@@ -72,46 +75,46 @@ exports.SignupTheUser = async (req, res) => {
   }
 };
 
+
 exports.forgotPassword = async (req, res) => {
   try {
     const { emailId } = req.body;
-
-    if (!emailId) {
-      return res.status(400).json({
-        success: false,
-        message: "Email is required",
-      });
-    }
-
     const user = await User.findOne({ emailId });
 
-    // Do not reveal whether user exists (security best practice)
     if (!user) {
-      return res.status(200).json({
-        success: true,
-        message: "If the email exists, a reset token has been generated",
-      });
+      // Security best practice: don't tell them if email exists or not
+      return res.status(200).json({ success: true, message: "Email sent if account exists." });
     }
 
-    // Generate reset token
     const resetToken = user.getResetPasswordToken();
-
     await user.save({ validateBeforeSave: false });
 
-    return res.status(200).json({
-      success: true,
-      message: "Reset token generated successfully",
-      token: resetToken, // remove this in production if using email/OTP
-    });
-  } catch (error) {
-    console.error("Forgot password error:", error);
+    // Construct the URL for your Frontend
+    const resetUrl = `http://localhost:5173/reset-password/${resetToken}`;
 
-    return res.status(500).json({
-      success: false,
-      message: "Internal server error",
-    });
+    const message = `
+      <h1>Password Reset Request</h1>
+      <p>Someone requested a password reset for your BondWave account.</p>
+      <p>Please click the link below to reset your password. This link expires in 10 minutes.</p>
+      <a href="${resetUrl}" clicktracking=off>${resetUrl}</a>
+    `;
+
+    try {
+      await sendEmail(user.emailId, "BondWave - Password Reset", "Reset your password", message);
+      
+      res.status(200).json({ success: true, message: "Email sent successfully" });
+    } catch (err) {
+      console.log("email could not be send", err)
+      return res.status(500).json({ message: "Email could not be sent" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
   }
 };
+
+
+
+
 
 exports.resetPassword = async (req, res) => {
   try {

@@ -110,9 +110,11 @@ function Login() {
                 <span className="label-text text-xs font-semibold uppercase tracking-wide">
                   Password
                 </span>
+                <Link to="/forget-password">
                 <span className="label-text-alt text-rose-500 cursor-pointer">
                   Forgot?
                 </span>
+                </Link>
               </label>
               <input
                 type="password"
