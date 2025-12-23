@@ -41,7 +41,10 @@ function Signup() {
       formData.append("age", age);
       formData.append("gender", gender);
       formData.append("about", about);
-      formData.append("skills", skills.split(",").map((s) => s.trim()));
+
+      skills.split(",").forEach((skill) => {
+        formData.append("skills", skill.trim());
+      });
 
       if (imageFile) {
         formData.append("image", imageFile);
