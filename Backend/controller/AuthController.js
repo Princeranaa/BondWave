@@ -2,8 +2,7 @@ const User = require("../model/Auth_user");
 const { validateSignUpData } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const {sendEmail} = require("../config/Nodemailer");
-
+const { sendEmail } = require("../config/Nodemailer");
 
 exports.SignupTheUser = async (req, res) => {
   try {
@@ -62,8 +61,10 @@ exports.SignupTheUser = async (req, res) => {
 
     // Set the token in cookies
     res.cookie("token", token, {
-      expires: new Date(Date.now() + 8 * 3600000),
-      httpOnly: true, // Secure cookie
+      httpOnly: true, // Cannot be accessed via JS
+      secure: true, // Only send over HTTPS
+      sameSite: "None", // Required for cross-origin cookies
+      maxAge: 8 * 3600000, // 8 hours
     });
 
     res
@@ -75,7 +76,6 @@ exports.SignupTheUser = async (req, res) => {
   }
 };
 
-
 exports.forgotPassword = async (req, res) => {
   try {
     const { emailId } = req.body;
@@ -83,7 +83,9 @@ exports.forgotPassword = async (req, res) => {
 
     if (!user) {
       // Security best practice: don't tell them if email exists or not
-      return res.status(200).json({ success: true, message: "Email sent if account exists." });
+      return res
+        .status(200)
+        .json({ success: true, message: "Email sent if account exists." });
     }
 
     const resetToken = user.getResetPasswordToken();
@@ -100,21 +102,24 @@ exports.forgotPassword = async (req, res) => {
     `;
 
     try {
-      await sendEmail(user.emailId, "BondWave - Password Reset", "Reset your password", message);
-      
-      res.status(200).json({ success: true, message: "Email sent successfully" });
+      await sendEmail(
+        user.emailId,
+        "BondWave - Password Reset",
+        "Reset your password",
+        message
+      );
+
+      res
+        .status(200)
+        .json({ success: true, message: "Email sent successfully" });
     } catch (err) {
-      console.log("email could not be send", err)
+      console.log("email could not be send", err);
       return res.status(500).json({ message: "Email could not be sent" });
     }
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-
-
-
 
 exports.resetPassword = async (req, res) => {
   try {
@@ -170,7 +175,9 @@ exports.changePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
 
     if (!oldPassword || !newPassword) {
-      return res.status(400).json({ message: "Old and new password are required." });
+      return res
+        .status(400)
+        .json({ message: "Old and new password are required." });
     }
 
     const user = await User.findById(userId);
@@ -211,7 +218,10 @@ exports.loginTheUser = async (req, res) => {
       const token = await user.getJWT();
 
       res.cookie("token", token, {
-        expires: new Date(Date.now() + 8 * 3600000),
+        httpOnly: true, // Cannot be accessed via JS
+        secure: true, // Only send over HTTPS
+        sameSite: "None", // Required for cross-origin cookies
+        maxAge: 8 * 3600000, // 8 hours
       });
       res.send(user);
     } else {
