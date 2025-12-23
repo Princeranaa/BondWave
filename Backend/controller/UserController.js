@@ -2,7 +2,7 @@ const ConnectionRequest = require("../model/Connection_model");
 const User = require("../model/Auth_user");
 
 // const USER_INFO = ["firstName","lastName","age","gender","photoUrl","about","skills",];
-const USER_INFO = "firstName lastName photoUrl age gender about skills";
+const USER_INFO = "firstName lastName avatarUrl age gender about skills";
 exports.UserConnectionRequest = async (req, res) => {
   try {
     const loggedInUser = req.user;
@@ -51,7 +51,7 @@ exports.requestAllTheUser = async (req, res) => {
 exports.userFeed = async (req, res) => {
   try {
     const loggedInUser = req.user;
-    
+
     const page = parseInt(req.query.page) || 1;
     let limit = parseInt(req.query.limit) || 10;
     limit = limit > 50 ? 50 : limit;
@@ -68,8 +68,8 @@ exports.userFeed = async (req, res) => {
     connectionRequests.forEach((request) => {
       // hideUserFromFeed.add(request.fromUserId.toString());
       // hideUserFromFeed.add(request.toUserId.toString());
-      hideUserFromFeed.add(request.fromUserId._id.toString());
-      hideUserFromFeed.add(request.toUserId._id.toString());
+        hideUserFromFeed.add(request.fromUserId._id.toString());
+        hideUserFromFeed.add(request.toUserId._id.toString());
     });
 
     const users = await User.find({
