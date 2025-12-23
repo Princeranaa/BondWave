@@ -48,13 +48,14 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
-
-    photoUrl: {
+    
+    avatarUrl: {
       type: String,
-      default: "https://geographyandyou.com/images/user-profile.png",
-      validate(value) {
-        // Add your validation logic here if needed
-      },
+      default: "https://geographyandyou.com/images/user-profile.png"
+    },
+    avatarFileId: {
+      type: String, // Needed for deletion/updating
+      default: ""
     },
     about: {
       type: String,

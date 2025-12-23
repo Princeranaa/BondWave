@@ -3,10 +3,15 @@ const { validateSignUpData } = require("../utils/validation");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
 const { sendEmail } = require("../config/Nodemailer");
+const { uploadFile } = require("../config/ImageKit");
+const { v4: uuidv4 } = require("uuid");
+
 
 exports.SignupTheUser = async (req, res) => {
   try {
     // Destructure and validate input
+    const file = req.file;
+
     const {
       firstName,
       lastName,
@@ -15,7 +20,6 @@ exports.SignupTheUser = async (req, res) => {
       skills,
       gender,
       age,
-      photoUrl,
       about,
     } = req.body;
 
@@ -24,8 +28,6 @@ exports.SignupTheUser = async (req, res) => {
         .status(400)
         .send("ERROR: First name, email, and password are required.");
     }
-
-    console.log("Signup data received:", req.body);
 
     // Check if the user already exists
     const existingUser = await User.findOne({ emailId });
@@ -37,7 +39,20 @@ exports.SignupTheUser = async (req, res) => {
 
     // Encrypt the password
     const passwordHash = await bcrypt.hash(password, 10);
-    console.log("Password hashed successfully.");
+
+    let avatarUrl = "https://geographyandyou.com/images/user-profile.png";
+    let avatarFileId = "";
+
+    if (file) {
+      try {
+        const result = await uploadFile(file.buffer, `${uuidv4()}`);
+        avatarUrl = result.url;
+        avatarFileId = result.fileId;
+      } catch (err) {
+        console.error("ImageKit upload failed:", err);
+        return res.status(500).send("Failed to upload image");
+      }
+    }
 
     // Create a new user
     const user = new User({
@@ -48,16 +63,15 @@ exports.SignupTheUser = async (req, res) => {
       skills,
       gender,
       age,
-      photoUrl,
+      avatarUrl,
+      avatarFileId,
       about,
     });
 
     const savedUser = await user.save();
-    console.log("User created successfully:", savedUser);
 
     // Generate a token
     const token = await savedUser.getJWT();
-    console.log("JWT generated:", token);
 
     // Set the token in cookies
     res.cookie("token", token, {
