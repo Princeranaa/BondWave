@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { removeUserFromFeed } from "../utils/feedSlice";
 
 function UserCard({ user }) {
-  const { _id, firstName, lastName, age, photoUrl, gender, about } = user;
+  const { _id, firstName, lastName, age, avatarUrl, gender, about } = user;
   const dispatch = useDispatch();
 
   const handleSendRequest = async (status, userId) => {
@@ -23,7 +23,7 @@ function UserCard({ user }) {
       
       {/* Profile Image */}
       <img
-        src={photoUrl}
+        src={avatarUrl}
         alt="profile"
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
       />
