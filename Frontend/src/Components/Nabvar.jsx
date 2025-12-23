@@ -68,7 +68,7 @@ return (
             <div className="dropdown dropdown-end">
               <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar online ring-2 ring-violet-500 ring-offset-2 ring-offset-base-100">
                 <div className="w-10 rounded-full">
-                  <img alt="User" src={user.photoUrl || "https://via.placeholder.com/150"} />
+                  <img alt="User" src={user.avatarUrl || "https://via.placeholder.com/150"} />
                 </div>
               </div>
               <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow-xl menu menu-sm dropdown-content bg-base-100 rounded-box w-52 border border-base-200">
