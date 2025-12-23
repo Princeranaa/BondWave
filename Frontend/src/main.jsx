@@ -6,6 +6,9 @@ import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import appStore from "./utils/appStore.js";
 import { Toaster } from "react-hot-toast";
+
+console.log("BASE_URL:", import.meta.env.VITE_API_URL);
+
 createRoot(document.getElementById("root")).render(
   
     <Provider store={appStore}>
