@@ -41,9 +41,11 @@ function Chat() {
   }, []);
 
   /* send message function  */
+  const socketRef = useRef(null);
+
   const sendMessage = () => {
-    const socket = createSocketConnection();
-    socket.emit("sendMessage", {
+    if (!socketRef.current) return;
+    socketRef.current.emit("sendMessage", {
       firstName: user.firstName,
       lastName: user.lastName,
       userId,
@@ -57,22 +59,22 @@ function Chat() {
   useEffect(() => {
     if (!userId) return;
 
-    const socket = createSocketConnection();
+    socketRef.current = createSocketConnection();
 
     /* joined a chat of the users */
-    socket.emit("joinChat", {
+    socketRef.current.emit("joinChat", {
       firstName: user.firstName,
       userId,
       targetUserId,
     });
 
-    socket.on("messageReceived", ({ firstName, text }) => {
-      console.log("hello user---->", firstName + " " + text);
+    socketRef.current.on("messageReceived", ({ firstName, text }) => {
+      // console.log("hello user---->", firstName + " " + text);
       setMessage((message) => [...message, { firstName, text }]);
     });
 
     return () => {
-      socket.disconnect();
+      socketRef.current?.disconnect();
     };
   }, [userId, targetUserId]);
 
@@ -92,7 +94,7 @@ function Chat() {
             <div className="w-12 rounded-full ring-2 ring-white/40">
               <img
                 src={
-                  targetUser?.photoUrl ||
+                  targetUser?.avatarUrl ||
                   "https://images.unsplash.com/photo-1502685104226-ee32379fefbe"
                 }
               />

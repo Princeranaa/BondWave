@@ -31,10 +31,21 @@ const initializeScoket = (server) => {
 
     socket.on(
       "sendMessage",
-      async ({ firstName,lastName, userId, targetUserId, text }) => {
+      async ({ firstName, lastName, userId, targetUserId, text }) => {
         // console.log(firstName + " " + text);
         // const roomId = [userId, targetUserId].sort().join("_");
-        console.log("PAYLOAD RECEIVED:", { firstName,lastName , userId, targetUserId, text });
+        // console.log("PAYLOAD RECEIVED:", {
+        //   firstName,
+        //   lastName,
+        //   userId,
+        //   targetUserId,
+        //   text,
+        // });
+
+        if (!userId || !targetUserId) {
+          console.error("Invalid Payload: Missing userId or targetUserId");
+          return;
+        }
 
         try {
           const roomId = getSecretRoomId(userId, targetUserId);
@@ -58,7 +69,7 @@ const initializeScoket = (server) => {
           await chat.save();
           io.to(roomId).emit("messageReceived", { firstName, lastName, text });
         } catch (error) {
-          console.log("sendMessage", error);
+          console.error("sendMessage Error:", error.message, error);
         }
       }
     );
