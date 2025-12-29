@@ -18,49 +18,91 @@ function UserCard({ user }) {
     dispatch(removeUserFromFeed(userId));
   };
 
- return (
-    <div className="relative w-96 h-[520px] rounded-3xl overflow-hidden shadow-xl bg-base-300 group">
-      
+  return (
+    <div
+      className="
+      relative
+      w-full
+      max-w-sm sm:max-w-md md:max-w-lg
+      h-[75vh] sm:h-[80vh]
+      rounded-3xl
+      overflow-hidden
+      bg-base-300
+      shadow-2xl
+      transition-transform duration-300
+      hover:scale-[1.02]
+    "
+    >
       {/* Profile Image */}
       <img
         src={avatarUrl}
         alt="profile"
-        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        className="
+        absolute inset-0
+        w-full h-full
+        object-cover
+        transition-transform duration-500
+        hover:scale-105
+      "
       />
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      {/* Soft Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
       {/* User Info */}
-      <div className="absolute bottom-24 left-5 right-5 text-white">
-        <h2 className="text-2xl font-bold tracking-wide">
+      <div className="absolute bottom-28 left-4 right-4 text-white">
+        <h2 className="text-2xl sm:text-3xl font-semibold leading-tight">
           {firstName} {lastName}
-          {age && <span className="text-xl font-normal">, {age}</span>}
+          {age && <span className="text-lg font-normal">, {age}</span>}
         </h2>
 
         {gender && (
-          <p className="text-sm opacity-80 mt-1 capitalize">{gender}</p>
+          <p className="text-sm uppercase tracking-wide opacity-80 mt-1">
+            {gender}
+          </p>
         )}
 
         {about && (
-          <p className="text-sm mt-2 line-clamp-3 opacity-90">
-            {about}
-          </p>
+          <p className="text-sm mt-3 opacity-90 line-clamp-3">{about}</p>
         )}
       </div>
 
-      {/* Action Buttons */}
-      <div className="absolute bottom-5 left-0 right-0 flex justify-center gap-6">
+      {/* Action Buttons Container */}
+      <div className="absolute bottom-6 left-0 right-0 flex justify-center gap-8">
+        {/* Ignore */}
         <button
           onClick={() => handleSendRequest("ignored", _id)}
-          className="btn btn-circle btn-lg bg-white text-red-500 hover:bg-red-500 hover:text-white shadow-lg transition-all"
+          className="
+          w-14 h-14
+          rounded-full
+          bg-white/90
+          text-red-500
+          text-2xl
+          shadow-xl
+          backdrop-blur-md
+          transition-all
+          hover:bg-red-500 hover:text-white hover:scale-110
+          active:scale-95
+        "
         >
           ✕
         </button>
 
+        {/* Like */}
         <button
           onClick={() => handleSendRequest("interested", _id)}
-          className="btn btn-circle btn-lg bg-white text-green-500 hover:bg-green-500 hover:text-white shadow-lg transition-all"
+          className="
+          w-14 h-14
+          rounded-full
+          bg-white/90
+          text-green-500
+          text-2xl
+          shadow-xl
+          backdrop-blur-md
+          transition-all
+          hover:bg-green-500 hover:text-white hover:scale-110
+          active:scale-95
+        "
         >
           ❤
         </button>
