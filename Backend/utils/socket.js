@@ -12,7 +12,7 @@ const initializeScoket = (server) => {
 
   const io = socket(server, {
     cors: {
-      origin: "http://localhost:5173",
+      origin: ["http://localhost:5173", "http://localhost:5174"],
     },
   });
 
@@ -32,15 +32,7 @@ const initializeScoket = (server) => {
     socket.on(
       "sendMessage",
       async ({ firstName, lastName, userId, targetUserId, text }) => {
-        // console.log(firstName + " " + text);
-        // const roomId = [userId, targetUserId].sort().join("_");
-        // console.log("PAYLOAD RECEIVED:", {
-        //   firstName,
-        //   lastName,
-        //   userId,
-        //   targetUserId,
-        //   text,
-        // });
+ 
 
         if (!userId || !targetUserId) {
           console.error("Invalid Payload: Missing userId or targetUserId");
